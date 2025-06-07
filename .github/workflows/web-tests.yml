@@ -1,0 +1,37 @@
+name: Web UI Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/test/java/web/**'
+      - '.github/workflows/web-tests.yml'
+
+jobs:
+  run-web-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Chrome for Selenium
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x gradlew
+
+      - name: Run Web UI Tests
+        run: ./gradlew webTest
+
+      - name: Upload Web Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-report
+          path: build/reports/tests/webTest/
