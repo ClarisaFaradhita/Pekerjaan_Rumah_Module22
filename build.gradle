@@ -10,10 +10,46 @@ repositories {
 }
 
 dependencies {
+    // JUnit Jupiter (JUnit 5)
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // Cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.14.0'
+
+    // Selenium (untuk Web UI)
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
+
+    // Rest Assured (untuk API)
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+
+    // JUnit 4 (untuk compatibility jika dibutuhkan)
+    testImplementation 'junit:junit:4.13.2'
 }
 
+// Default test task (bisa diatur pakai tag juga)
 test {
     useJUnitPlatform()
+    systemProperty 'cucumber.filter.tags', 'not @Ignore' // default tag
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+// Task untuk Web UI test
+tasks.register('webTest', Test) {
+    useJUnitPlatform()
+    systemProperty 'cucumber.filter.tags', '@web'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    shouldRunAfter 'test'
+}
+
+// Task untuk API test
+tasks.register('apiTest', Test) {
+    useJUnitPlatform()
+    systemProperty 'cucumber.filter.tags', '@api'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    shouldRunAfter 'test'
 }
