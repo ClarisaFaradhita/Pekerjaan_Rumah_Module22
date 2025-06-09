@@ -48,8 +48,8 @@ tasks.register('webTest', Test) {
 // Task untuk API test
 tasks.register('apiTest', Test) {
     useJUnitPlatform()
-    systemProperty 'cucumber.filter.tags', '@api'
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
-    shouldRunAfter 'test'
+    systemProperty "cucumber.filter.tags", "@api"
+    systemProperty "cucumber.plugin", "pretty,json:build/reports/tests/apiTest/report.json,html:build/reports/tests/apiTest/html"
 }
