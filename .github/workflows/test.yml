@@ -3,9 +3,9 @@ name: Run JUnit CI
 #Triger / Kapan Action-nya jalan
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 permissions:
   contents: read
@@ -39,12 +39,18 @@ jobs:
       - name: Run Tests
         run: ./gradlew clean test  # Run tests after the build step
 
-      - name: Archive test results
+#      - name: Archive test results
+#        uses: actions/upload-artifact@v4.3.0
+#        if: always() #always() # success() , failure(), canceled()
+#        with:
+#          name: cucumber reports
+#          path: target/index.html  # Path to test reports
+      - name: Archive Cucumber HTML Report
         uses: actions/upload-artifact@v4.3.0
-        if: always() #always() # success() , failure(), canceled()
+        if: always()
         with:
-          name: cucumber reports
-          path: target/index.html  # Path to test reports
+          name: cucumber-html-report
+          path: build/reports/cucumber/html/
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
