@@ -36,10 +36,20 @@ jobs:
           chmod +x gradlew  # Make gradlew executable
           ./gradlew build   # Run the build task before tests
 
-      - name: Run Tests
-        run: ./gradlew clean test  # Run tests after the build step
+#      - name: Run Tests
+#        run: ./gradlew clean test  # Run tests after the build step
 
-#      - name: Archive test results
+      - name: Run API Tests
+        run: ./gradlew apiTest
+
+      - name: Archive API Test Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-test-report
+          path: build/reports/tests/apiTest/html/
+
+      #      - name: Archive test results
 #        uses: actions/upload-artifact@v4.3.0
 #        if: always() #always() # success() , failure(), canceled()
 #        with:
